@@ -60,5 +60,5 @@ for i, ax in enumerate(axes.flat):
     # ax.set_title(f'{labels[i].item()}', fontsize=8)
 
 plt.tight_layout()
-plt.savefig("M5-HPC/MEDMNIST_ML_PROJECT/output/dermamnist-grid.png", dpi=300)
+plt.savefig("M5-HPC/MEDMNIST_ML_PROJECT/final_version/output/dermamnist-grid.png", dpi=300)
 plt.show()
