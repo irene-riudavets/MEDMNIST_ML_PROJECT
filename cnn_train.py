@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix, classification_report, accuracy_sc
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
-from sklearn.utils.class_weight import compute_class_weight  # Added for balancing
+from sklearn.utils.class_weight import compute_class_weight
 import seaborn as sns
 import derma_nn as ch4nn
 
