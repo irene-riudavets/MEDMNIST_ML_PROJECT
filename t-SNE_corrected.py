@@ -40,7 +40,6 @@ std  = fim.std(axis=1, keepdims=True)
 std[std == 0] = 1.0
 fims = (fim - mean) / std
 
-# ---- Subsample for t-SNE (VERY IMPORTANT) ----
 n_tsne = 5000
 fims_sub = fims[:n_tsne]
 labels_sub = labels[:n_tsne]
@@ -49,11 +48,10 @@ labels_sub = labels[:n_tsne]
 pca = PCA(n_components=50, random_state=42)
 xpca = pca.fit_transform(fims_sub)
 
-# KMeans in PCA space
+# KMeans
 km = KMeans(n_clusters=7, random_state=7)
 clusters = km.fit_predict(xpca)
 
-# t-SNE for visualization only
 tsne = TSNE(
     n_components=2,
     perplexity=30,
