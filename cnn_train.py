@@ -20,7 +20,7 @@ np.random.seed(42)
 train_dataset = medmnist.DermaMNIST(split='train', download=True, as_rgb=True)
 val_dataset   = medmnist.DermaMNIST(split='val', download=True, as_rgb=True)
 
-# DATA PREPROCESSING (Modified for CNN: keeps 28x28x3 shape)
+# DATA PREPROCESSING (keep 28x28x3 shape)
 def preprocess_dataset(dataset):
     # Stack images and permute to (N, Channels, H, W) for CNN
     images = torch.stack([torch.from_numpy(np.array(dataset[i][0])) for i in range(len(dataset))])
@@ -38,7 +38,7 @@ val_images, val_labels     = preprocess_dataset(val_dataset)
 model = ch4nn.CNNet()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# CLASS BALANCING: Calculate weights
+# CLASS BALANCING
 weights = compute_class_weight('balanced', classes=np.unique(train_labels), y=train_labels.numpy())
 class_weights = torch.tensor(weights, dtype=torch.float)
 loss_fn = nn.NLLLoss(weight=class_weights) # Apply weights here
@@ -67,7 +67,7 @@ for epoch in range(epochs):
 torch.save(model.state_dict(), "output/cnn-dermamnist-trained.pth")
 
 
-# MODEL EVALUATION (VALIDATION ONLY)
+# MODEL EVALUATION
 
 model.eval()
 with torch.no_grad():
@@ -82,7 +82,7 @@ with torch.no_grad():
 print(f"\n   Training Accuracy: {train_acc:.3f}")
 print(f"   Validation Accuracy: {val_acc:.3f}")
 
-# 7. CONFUSION MATRIX (VALIDATION)
+# 7. CONFUSION MATRIX
 
 cm = confusion_matrix(val_labels.numpy(), val_pred.numpy())
 plt.figure(figsize=(8, 6))
@@ -95,7 +95,7 @@ plt.savefig('output/cnn_confusion_matrix.png', dpi=150)
 plt.close()
 
 
-# CLASSIFICATION REPORT (VALIDATION)
+# CLASSIFICATION REPORT
 
 print(classification_report(val_labels.numpy(), val_pred.numpy()))
 
