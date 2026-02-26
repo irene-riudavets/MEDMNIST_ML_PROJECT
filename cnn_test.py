@@ -12,7 +12,7 @@ torch.manual_seed(42)
 # 1. LOAD TEST DATASET
 test_dataset = medmnist.DermaMNIST(split='test', download=True, as_rgb=True)
 
-# 2. PREPROCESSING (Must match the training logic)
+# 2. PREPROCESSING
 def preprocess_test(dataset):
     # Stack images into a tensor
     images = torch.stack([torch.from_numpy(np.array(dataset[i][0])) for i in range(len(dataset))])
@@ -28,7 +28,7 @@ def preprocess_test(dataset):
 
 test_images, test_labels = preprocess_test(test_dataset)
 
-# 3. LOAD THE TRAINED MODEL
+# 3. LOAD TRAINED MODEL
 trained_model_path = "output/cnn-dermamnist-trained.pth" 
 
 model = ch4nn.CNNet()
