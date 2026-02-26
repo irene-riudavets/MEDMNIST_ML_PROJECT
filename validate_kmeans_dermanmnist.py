@@ -14,9 +14,8 @@ from sklearn.metrics import (
     normalized_mutual_info_score
 )
 
-# -----------------------------
 # 1. Load DermaMNIST
-# -----------------------------
+
 train = medmnist.DermaMNIST(split='train', download=True, as_rgb=True)
 val   = medmnist.DermaMNIST(split='val',   download=True, as_rgb=True)
 test  = medmnist.DermaMNIST(split='test',  download=True, as_rgb=True)
@@ -36,9 +35,8 @@ labels = np.array(
 print("Images shape:", images.shape)
 print("Unique labels:", np.unique(labels))
 
-# -----------------------------
 # 2. Normalize & flatten
-# -----------------------------
+
 images = images.astype(np.float32) / 255.0
 N = images.shape[0]
 fim = images.reshape(N, -1)
@@ -49,29 +47,24 @@ std  = fim.std(axis=1, keepdims=True)
 std[std == 0] = 1.0
 fims = (fim - mean) / std
 
-# -----------------------------
-# 3. Subsample for t-SNE
-# -----------------------------
 n_tsne = 5000
 fims_sub = fims[:n_tsne]
 labels_sub = labels[:n_tsne]
 
-# -----------------------------
 # 4. PCA (for clustering)
-# -----------------------------
+
 pca = PCA(n_components=50, random_state=42)
 xpca = pca.fit_transform(fims_sub)
 
-# -----------------------------
 # 5. KMeans clustering
-# -----------------------------
+
 n_clusters = 7
 kmeans = KMeans(n_clusters=n_clusters, random_state=7)
 clusters = kmeans.fit_predict(xpca)
 
-# -----------------------------
-# 6. Quantitative validation
-# -----------------------------
+
+# 6. Validation
+
 ari = adjusted_rand_score(labels_sub, clusters)
 nmi = normalized_mutual_info_score(labels_sub, clusters)
 
@@ -89,9 +82,6 @@ cm_df = pd.DataFrame(
 print("\nConfusion matrix (rows=true labels, cols=clusters):")
 print(cm_df)
 
-# -----------------------------
-# 7. Majority-vote label mapping
-# -----------------------------
 cluster_label_map = {}
 
 for c in np.unique(clusters):
@@ -103,9 +93,9 @@ print("\nCluster → majority true label mapping:")
 for k, v in cluster_label_map.items():
     print(f"Cluster {k} → Label {v}")
 
-# -----------------------------
+
 # 8. t-SNE visualization
-# -----------------------------
+
 tsne = TSNE(
     n_components=2,
     perplexity=30,
